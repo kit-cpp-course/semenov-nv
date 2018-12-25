@@ -1,10 +1,10 @@
-Ôªø#include "pch.h"
+#include "pch.h"
 #include "AES.h"
 
-//–ë–µ–∑–∑–Ω–∞–∫–æ–≤—ã–π <<
+//¡ÂÁÁÌ‡ÍÓ‚˚È <<
 unsigned char rj_xtime(unsigned char x);
 
-// –∑–∞–ø–æ–ª–Ω—è–µ–º –æ—Ä–∏–≥–∏–Ω–∞–ª—å–Ω—ã–π –∫–ª—é—á–µ–≤–æ–π –≤–µ–∫—Ç–æ—Ä
+// Á‡ÔÓÎÌˇÂÏ ÓË„ËÌ‡Î¸Ì˚È ÍÎ˛˜Â‚ÓÈ ‚ÂÍÚÓ
 AES::AES(const ByteArray & key)
 	: m_key(ByteArray(key.size() > KEY_SIZE ? KEY_SIZE : key.size(), 0)),
 	m_salt(ByteArray(KEY_SIZE - m_key.size(), 0)), m_rkey(ByteArray(KEY_SIZE, 0)), m_buffer_pos(0),
@@ -18,18 +18,18 @@ AES::AES(const ByteArray & key)
 
 
 
-// —Å–æ–∑–¥–∞–µ–º –ø–æ–ª–Ω—ã–π –∫–ª—é—á (–µ—Å–ª–∏ –æ—Ä–∏–≥–∏–Ω–∞–ª <256 –±–∏—Ç)
+// ÒÓÁ‰‡ÂÏ ÔÓÎÌ˚È ÍÎ˛˜ (ÂÒÎË ÓË„ËÌ‡Î <256 ·ËÚ)
 ByteArray::size_type AES::encrypt_start(const ByteArray::size_type plain_length, ByteArray &encrypted) {
 	m_remainingLength = plain_length;
 
-	// –≥–µ–Ω–µ—Ä–∏—Ä—É–µ–º —Å–æ–ª—å
-	// –°–æ–ª—å, —ç—Ç–æ –¥–æ–±–∏–≤–∫–∞ –∫–ª—é—á–∞ –¥–æ –Ω—É–∂–Ω–æ–≥–æ —Ä–∞–∑–º–µ—Ä–∞
+	// „ÂÌÂËÛÂÏ ÒÓÎ¸
+	// —ÓÎ¸, ˝ÚÓ ‰Ó·Ë‚Í‡ ÍÎ˛˜‡ ‰Ó ÌÛÊÌÓ„Ó ‡ÁÏÂ‡
 	for (unsigned char &i : m_salt) {
 		i = (rand() & 0xFF);
 	}
 
 	// 
-	// –†–∞—Å—Å—á–∏—Ç–∞nm –∑–∞–ø–æ–ª–Ω–µ–Ω–∏–µ
+	// –‡ÒÒ˜ËÚ‡nm Á‡ÔÓÎÌÂÌËÂ
 	ByteArray::size_type padding = 0;
 	if (m_remainingLength % BLOCK_SIZE != 0)
 	{
@@ -37,21 +37,21 @@ ByteArray::size_type AES::encrypt_start(const ByteArray::size_type plain_length,
 	}
 	m_remainingLength += padding;
 
-	// –¥–æ–±–æ–≤–ª—è–µ–º —Å–æ–ª—å
+	// ‰Ó·Ó‚ÎˇÂÏ ÒÓÎ¸
 	encrypted.insert(encrypted.end(), m_salt.begin(), m_salt.end());
 	m_remainingLength += m_salt.size();
 
-	//–î–æ–±–∞–≤–ª—è–µ–º 1 –±–∞–π—Ç –¥–ª—è —Ä–∞–∑–º–µ—Ä–∞ –∑–∞–ø–æ–ª–Ω–µ–Ω–∏—è
+	//ƒÓ·‡‚ÎˇÂÏ 1 ·‡ÈÚ ‰Îˇ ‡ÁÏÂ‡ Á‡ÔÓÎÌÂÌËˇ
 	encrypted.push_back(padding & 0xFF);
 	++m_remainingLength;
 
-	// —Å–±—Ä–∞—Å—ã–≤–∞–µ–º –±—É—Ñ–µ—Ä
+	// Ò·‡Ò˚‚‡ÂÏ ·ÛÙÂ
 	m_buffer_pos = 0;
 
 	return encrypted.size();
 }
 
-// –ø—Ä–æ—Ü–µ—Å—Å —à–∏—Ñ—Ä–æ–≤–∞–Ω–∏—è
+// ÔÓˆÂÒÒ ¯ËÙÓ‚‡ÌËˇ
 ByteArray::size_type
 AES::encrypt_continue(const unsigned char *plain, const ByteArray::size_type plain_length, ByteArray &encrypted) {
 	ByteArray::size_type i = 0;
@@ -65,7 +65,7 @@ AES::encrypt_continue(const unsigned char *plain, const ByteArray::size_type pla
 	return encrypted.size();
 }
 
-//–ï—Å–ª–∏ –±–ª–æ–∫ —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É–µ—Ç —Ä–∞–∑–º–µ—Ä—É
+//≈ÒÎË ·ÎÓÍ ÒÓÓÚ‚ÂÚÒÚ‚ÛÂÚ ‡ÁÏÂÛ
 void AES::checkEnc(ByteArray &encrypted) {
 	if (m_buffer_pos == BLOCK_SIZE) {
 		encrypt(m_buffer);
@@ -80,11 +80,12 @@ void AES::checkEnc(ByteArray &encrypted) {
 }
 
 
-// –∑–∞–≤–µ—Ä—à–∞–µ–º –ø—Ä–æ—Ü–µ—Å—Å —à–∏—Ñ—Ä–æ–≤–∞–Ω–∏—è
+// Á‡‚Â¯‡ÂÏ ÔÓˆÂÒÒ ¯ËÙÓ‚‡ÌËˇ
 ByteArray::size_type AES::encrypt_end(ByteArray &encrypted) {
 	if (m_buffer_pos > 0) {
-		while (m_buffer_pos < BLOCK_SIZE)
+		while (m_buffer_pos < BLOCK_SIZE) {
 			m_buffer[m_buffer_pos++] = 0;
+		}
 
 		encrypt(m_buffer);
 
@@ -100,7 +101,7 @@ ByteArray::size_type AES::encrypt_end(ByteArray &encrypted) {
 }
 
 
-// —Ä–µ–∞–ª–∏–∑–∞—Ü–∏—è –±–∞–∑–æ–≤–æ–≥–æ –∞–ª–≥–æ—Ä–∏—Ç–º–∞
+// Â‡ÎËÁ‡ˆËˇ ·‡ÁÓ‚Ó„Ó ‡Î„ÓËÚÏ‡
 void AES::encrypt(unsigned char *buffer) {
 	unsigned char i, rcon;
 
@@ -122,14 +123,14 @@ void AES::encrypt(unsigned char *buffer) {
 ByteArray::size_type AES::decrypt_start(const ByteArray::size_type encrypted_length) {
 	m_remainingLength = encrypted_length;
 
-	// –°–±—Ä–æ—Å–∏—Ç—å —Å–æ–ª—å
+	// —·ÓÒËÚ¸ ÒÓÎ¸
 	for (unsigned char j = 0; j < m_salt.size(); ++j) {
 		m_salt[j] = 0;
 	}
 	m_remainingLength -= m_salt.size();
 
 
-	// –°–±—Ä–æ—Å–∏—Ç—å –±—É—Ñ–µ—Ä
+	// —·ÓÒËÚ¸ ·ÛÙÂ
 	m_buffer_pos = 0;
 
 	m_decryptInitialized = false;
@@ -156,16 +157,16 @@ void AES::checkDec(ByteArray &plain) {
 		unsigned char j;
 		ByteArray::size_type padding;
 
-		// –ü–æ–ª—É—á–∏—Ç—å —Å–æ–ª—å
+		// œÓÎÛ˜ËÚ¸ ÒÓÎ¸
 		for (j = 0; j < m_salt.size(); ++j) {
 			m_salt[j] = m_buffer[j];
 		}
 
-		// –ü–æ–ª—É—á–∏—Ç—å –æ—Ç—Å—Ç—É–ø—ã
+		// œÓÎÛ˜ËÚ¸ ÓÚÒÚÛÔ˚
 		padding = (m_buffer[j] & 0xFF);
 		m_remainingLength -= padding + 1;
 
-		// –ù–∞—á–∞—Ç—å —Ä–∞—Å—à–∏—Ñ—Ä–æ–≤–∫—É
+		// Õ‡˜‡Ú¸ ‡Ò¯ËÙÓ‚ÍÛ
 		m_buffer_pos = 0;
 
 		m_decryptInitialized = true;
@@ -302,7 +303,7 @@ void AES::add_round_key(unsigned char *buffer, const unsigned char round) {
 }
 
 void AES::shift_rows(unsigned char *buffer) {
-	unsigned char i, j, k, l; // —á—Ç–æ–±—ã —Å–¥–µ–ª–∞—Ç—å –µ–≥–æ –ø–æ—Ç–µ–Ω—Ü–∏–∞–ª—å–Ω–æ –ø–∞—Ä–∞–ª–ª–µ–ª—å–Ω—ã–º :) 
+	unsigned char i, j, k, l; // ˜ÚÓ·˚ Ò‰ÂÎ‡Ú¸ Â„Ó ÔÓÚÂÌˆË‡Î¸ÌÓ Ô‡‡ÎÎÂÎ¸Ì˚Ï :) 
 
 	i = buffer[1];
 	buffer[1] = buffer[5];
@@ -326,7 +327,7 @@ void AES::shift_rows(unsigned char *buffer) {
 }
 
 void AES::shift_rows_inv(unsigned char *buffer) {
-	unsigned char i, j, k, l; // —Ç–æ –∂–µ, —á—Ç–æ –∏ –≤—ã—à–µ :) 
+	unsigned char i, j, k, l; // ÚÓ ÊÂ, ˜ÚÓ Ë ‚˚¯Â :) 
 
 	i = buffer[1];
 	buffer[1] = buffer[13];
