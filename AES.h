@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <vector>
 #define FE(x)  (((x) << 1) ^ ((((x)>>7) & 1) * 0x1b))
 #define FD(x)  (((x) >> 1) ^ (((x) & 1) ? 0x8d : 0))
@@ -9,7 +9,7 @@
 
 
 typedef std::vector<unsigned char> ByteArray;
-// реализация алгаритма AES 
+// СЂРµР°Р»РёР·Р°С†РёСЏ Р°Р»РіР°СЂРёС‚РјР° AES 
 class AES
 {
 public:

@@ -1,4 +1,4 @@
-#include "encrypt.h"
+﻿#include "encrypt.h"
 #include "AES.h"
 const long BUFFER_SIZE = 1024;
 

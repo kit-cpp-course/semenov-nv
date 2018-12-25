@@ -1,8 +1,8 @@
-#ifndef AES_ARG_H
+п»ї#ifndef AES_ARG_H
 #define AES_ARG_H
 
 #include <string>
-// разбор агргументов командной строки 
+// СЂР°Р·Р±РѕСЂ Р°РіСЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё 
 class Arg {
 public:
 	Arg(int count, char** args);

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Arg.h"
 #include <random>
 Arg::Arg(int count, char **args) {

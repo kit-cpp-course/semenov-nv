@@ -1,4 +1,4 @@
-#include "decrypt.h"
+﻿#include "decrypt.h"
 #include "AES.h"
 #include <iostream>
 #include <ctime>

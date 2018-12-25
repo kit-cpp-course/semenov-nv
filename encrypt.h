@@ -1,4 +1,4 @@
-
+﻿
 #ifndef AES256_ENCRYPT_H
 #define AES256_ENCRYPT_H
 
