@@ -1,10 +1,10 @@
-#include "pch.h"
+п»ї#include "pch.h"
 #include "AES.h"
 
-//Беззнаковый <<
+//Р‘РµР·Р·РЅР°РєРѕРІС‹Р№ <<
 unsigned char rj_xtime(unsigned char x);
 
-// заполняем оригинальный ключевой вектор
+// Р·Р°РїРѕР»РЅСЏРµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ РєР»СЋС‡РµРІРѕР№ РІРµРєС‚РѕСЂ
 AES::AES(const ByteArray & key)
 	: m_key(ByteArray(key.size() > KEY_SIZE ? KEY_SIZE : key.size(), 0)),
 	m_salt(ByteArray(KEY_SIZE - m_key.size(), 0)), m_rkey(ByteArray(KEY_SIZE, 0)), m_buffer_pos(0),
@@ -18,18 +18,18 @@ AES::AES(const ByteArray & key)
 
 
 
-// создаем полный ключ (если оригинал <256 бит)
+// СЃРѕР·РґР°РµРј РїРѕР»РЅС‹Р№ РєР»СЋС‡ (РµСЃР»Рё РѕСЂРёРіРёРЅР°Р» <256 Р±РёС‚)
 ByteArray::size_type AES::encrypt_start(const ByteArray::size_type plain_length, ByteArray &encrypted) {
 	m_remainingLength = plain_length;
 
-	// генерируем соль
-	// Соль, это добивка ключа до нужного размера
+	// РіРµРЅРµСЂРёСЂСѓРµРј СЃРѕР»СЊ
+	// РЎРѕР»СЊ, СЌС‚Рѕ РґРѕР±РёРІРєР° РєР»СЋС‡Р° РґРѕ РЅСѓР¶РЅРѕРіРѕ СЂР°Р·РјРµСЂР°
 	for (unsigned char &i : m_salt) {
 		i = (rand() & 0xFF);
 	}
 
 	// 
-	// Рассчитаnm заполнение
+	// Р Р°СЃСЃС‡РёС‚Р°nm Р·Р°РїРѕР»РЅРµРЅРёРµ
 	ByteArray::size_type padding = 0;
 	if (m_remainingLength % BLOCK_SIZE != 0)
 	{
@@ -37,21 +37,21 @@ ByteArray::size_type AES::encrypt_start(const ByteArray::size_type plain_length,
 	}
 	m_remainingLength += padding;
 
-	// добовляем соль
+	// РґРѕР±РѕРІР»СЏРµРј СЃРѕР»СЊ
 	encrypted.insert(encrypted.end(), m_salt.begin(), m_salt.end());
 	m_remainingLength += m_salt.size();
 
-	//Добавляем 1 байт для размера заполнения
+	//Р”РѕР±Р°РІР»СЏРµРј 1 Р±Р°Р№С‚ РґР»СЏ СЂР°Р·РјРµСЂР° Р·Р°РїРѕР»РЅРµРЅРёСЏ
 	encrypted.push_back(padding & 0xFF);
 	++m_remainingLength;
 
-	// сбрасываем буфер
+	// СЃР±СЂР°СЃС‹РІР°РµРј Р±СѓС„РµСЂ
 	m_buffer_pos = 0;
 
 	return encrypted.size();
 }
 
-// процесс шифрования
+// РїСЂРѕС†РµСЃСЃ С€РёС„СЂРѕРІР°РЅРёСЏ
 ByteArray::size_type
 AES::encrypt_continue(const unsigned char *plain, const ByteArray::size_type plain_length, ByteArray &encrypted) {
 	ByteArray::size_type i = 0;
@@ -65,7 +65,7 @@ AES::encrypt_continue(const unsigned char *plain, const ByteArray::size_type pla
 	return encrypted.size();
 }
 
-//Если блок соответствует размеру
+//Р•СЃР»Рё Р±Р»РѕРє СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ СЂР°Р·РјРµСЂСѓ
 void AES::checkEnc(ByteArray &encrypted) {
 	if (m_buffer_pos == BLOCK_SIZE) {
 		encrypt(m_buffer);
@@ -80,7 +80,7 @@ void AES::checkEnc(ByteArray &encrypted) {
 }
 
 
-// завершаем процесс шифрования
+// Р·Р°РІРµСЂС€Р°РµРј РїСЂРѕС†РµСЃСЃ С€РёС„СЂРѕРІР°РЅРёСЏ
 ByteArray::size_type AES::encrypt_end(ByteArray &encrypted) {
 	if (m_buffer_pos > 0) {
 		while (m_buffer_pos < BLOCK_SIZE) {
@@ -101,7 +101,7 @@ ByteArray::size_type AES::encrypt_end(ByteArray &encrypted) {
 }
 
 
-// реализация базового алгоритма
+// СЂРµР°Р»РёР·Р°С†РёСЏ Р±Р°Р·РѕРІРѕРіРѕ Р°Р»РіРѕСЂРёС‚РјР°
 void AES::encrypt(unsigned char *buffer) {
 	unsigned char i, rcon;
 
@@ -123,14 +123,14 @@ void AES::encrypt(unsigned char *buffer) {
 ByteArray::size_type AES::decrypt_start(const ByteArray::size_type encrypted_length) {
 	m_remainingLength = encrypted_length;
 
-	// Сбросить соль
+	// РЎР±СЂРѕСЃРёС‚СЊ СЃРѕР»СЊ
 	for (unsigned char j = 0; j < m_salt.size(); ++j) {
 		m_salt[j] = 0;
 	}
 	m_remainingLength -= m_salt.size();
 
 
-	// Сбросить буфер
+	// РЎР±СЂРѕСЃРёС‚СЊ Р±СѓС„РµСЂ
 	m_buffer_pos = 0;
 
 	m_decryptInitialized = false;
@@ -157,16 +157,16 @@ void AES::checkDec(ByteArray &plain) {
 		unsigned char j;
 		ByteArray::size_type padding;
 
-		// Получить соль
+		// РџРѕР»СѓС‡РёС‚СЊ СЃРѕР»СЊ
 		for (j = 0; j < m_salt.size(); ++j) {
 			m_salt[j] = m_buffer[j];
 		}
 
-		// Получить отступы
+		// РџРѕР»СѓС‡РёС‚СЊ РѕС‚СЃС‚СѓРїС‹
 		padding = (m_buffer[j] & 0xFF);
 		m_remainingLength -= padding + 1;
 
-		// Начать расшифровку
+		// РќР°С‡Р°С‚СЊ СЂР°СЃС€РёС„СЂРѕРІРєСѓ
 		m_buffer_pos = 0;
 
 		m_decryptInitialized = true;
@@ -303,7 +303,7 @@ void AES::add_round_key(unsigned char *buffer, const unsigned char round) {
 }
 
 void AES::shift_rows(unsigned char *buffer) {
-	unsigned char i, j, k, l; // чтобы сделать его потенциально параллельным :) 
+	unsigned char i, j, k, l; // С‡С‚РѕР±С‹ СЃРґРµР»Р°С‚СЊ РµРіРѕ РїРѕС‚РµРЅС†РёР°Р»СЊРЅРѕ РїР°СЂР°Р»Р»РµР»СЊРЅС‹Рј :) 
 
 	i = buffer[1];
 	buffer[1] = buffer[5];
@@ -327,7 +327,7 @@ void AES::shift_rows(unsigned char *buffer) {
 }
 
 void AES::shift_rows_inv(unsigned char *buffer) {
-	unsigned char i, j, k, l; // то же, что и выше :) 
+	unsigned char i, j, k, l; // С‚Рѕ Р¶Рµ, С‡С‚Рѕ Рё РІС‹С€Рµ :) 
 
 	i = buffer[1];
 	buffer[1] = buffer[13];
